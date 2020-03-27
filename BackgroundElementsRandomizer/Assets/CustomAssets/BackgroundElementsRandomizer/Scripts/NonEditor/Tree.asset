@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34933c4469ea8104fb54f6f4903451fb, type: 3}
+  m_Name: Tree
+  m_EditorClassIdentifier: 
+  Type: 1
+  RotationalAbility: 4
+  Scalability: 33
+  Meshes:
+  - {fileID: 2178022384030529044, guid: a69ecf352bc4754499e145d74e4673a5, type: 3}
+  - {fileID: 2178022384030529044, guid: d59aa83b0bccfdf44a612d06649abd18, type: 3}
+  - {fileID: 4768362842119814386, guid: df531cba95ff88e459fefb440ba84118, type: 3}
+  - {fileID: 4768362842119814386, guid: 99ebe430b2f89f04eb4f8399c3c149cf, type: 3}
+  - {fileID: 4768362842119814386, guid: 27229df46e22c614ca99f3c2c7699291, type: 3}
+  - {fileID: 7274670420771810953, guid: cf78141d294686f4d8091121c336aa5a, type: 3}
+  - {fileID: 7274670420771810953, guid: 9b732d6709308d242b1930b534f34ec8, type: 3}
+  - {fileID: 2189596836736745922, guid: 1dbbd93477f6c234fa872b8320b67f0f, type: 3}
+  - {fileID: 2189596836736745922, guid: 17ed3813ba450bd47b7f1430878f2b70, type: 3}
+  - {fileID: -3920987482455494174, guid: 5ddfb522f9a8cdf429e1d039e5dc7199, type: 3}
+  - {fileID: -3920987482455494174, guid: 63508bfbdc04ad24ca452b7cc8314ff7, type: 3}
+  - {fileID: -3392155244197057827, guid: f9eb1b92bc2bd514ab0c10a7b240136e, type: 3}
+  - {fileID: -3392155244197057827, guid: fab42614898cf4d4a9aa92065f5e6be4, type: 3}
+  - {fileID: 7560277172612512602, guid: 28b71bb1c0e603141b8e7d43cb697396, type: 3}
+  - {fileID: 7560277172612512602, guid: fe16095b04d8e5249b75815292f9c13c, type: 3}
+  Materials:
+  - {fileID: 2100000, guid: 646d82f116477c54abcc4c98a7744ca3, type: 2}
+  NewMaterials: []
+  TextureTiling: {x: 1, y: 1}
+  CanCollide: 1
+  ShouldOffsetTexture: 0
+  ShouldBlockUpwards: 0
