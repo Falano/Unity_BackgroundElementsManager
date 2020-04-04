@@ -28,7 +28,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         public List<Mesh> Meshes;
         [Header("Materials")]
         public List<Material> Materials;
-        [Tooltip("Different versions of the materials created through script, with a different offeset /n useful for natural textures")]
+        [Tooltip("Different versions of the materials created through script, with a different offset; useful for natural textures")]
         public List<Material> NewMaterials;
         [Header("Textures")]
         public bool ShouldOffsetTexture;

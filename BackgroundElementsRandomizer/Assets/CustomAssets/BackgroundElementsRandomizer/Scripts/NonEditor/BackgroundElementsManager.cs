@@ -14,12 +14,12 @@ namespace Nolanfa.BackgroundElementsRandomizer
 
         public static Dictionary<BackgroundTypes, BackgroundType> BgParameters = new Dictionary<BackgroundTypes, BackgroundType>();
 
-        //put this someplace else?
-        public static string AlternativeMaterialsFolderName = "alternativeVersions";
         public static List<string> AlternateMaterialsFoldersPaths = new List<string>();
-        public static char CorrectSeparator;
+        public static char CorrectSeparator { get { return Path.AltDirectorySeparatorChar; } } //GeneralInformation.Paths.CorrectSeparator; } }
 
         public static bool isDebugging = false;
+
+
 
         // to create a new type of background:
         // - create a new background type in the BackgroundTypes enum
@@ -197,25 +197,15 @@ namespace Nolanfa.BackgroundElementsRandomizer
                         continue;
                     }
                     matPath = AssetDatabase.GetAssetPath(type.Materials[0]);
-                    // TODO: put this someplace else: the correct separator is everyone's business
-                    CorrectSeparator = matPath.LastIndexOf(Path.DirectorySeparatorChar) > 0 ? Path.DirectorySeparatorChar : Path.AltDirectorySeparatorChar;
-                    int lastSlash = matPath.LastIndexOf(CorrectSeparator);
+                    int lastSlash = matPath.LastIndexOf(GeneralInformation.Paths.CorrectSeparator);
                     matPath = matPath.Remove(lastSlash);
-                    matFolder = matPath + CorrectSeparator + AlternativeMaterialsFolderName;
-                    if (!AssetDatabase.IsValidFolder(matFolder))
-                    {
-                        AssetDatabase.CreateFolder(matPath, AlternativeMaterialsFolderName);
-
-                        if (isDebugging)
-                        {
-                            Debug.Log("creating folder at " + matFolder);
-                        }
-                    }
+                    matFolder = matPath + CorrectSeparator + GeneralInformation.Paths.AlternativeMaterialsFolderName;
+                    GeneralOperations.CreateFolderIfEmpty(matFolder);
                     // for cleaning up purposes later
                     if (!AlternateMaterialsFoldersPaths.Contains(matFolder))
                     {
-                        Debug.Log("adding path " + matFolder);
                         AlternateMaterialsFoldersPaths.Add(matFolder);
+                        Debug.Log("created folder " + matFolder);
                     }
 
                     tiling = type.TextureTiling;
@@ -228,7 +218,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
                             {
                                 mainTextureOffset = new Vector2(Random.Range((float)0, (float)1), Random.Range((float)0, (float)1))
                             };
-                            AssetDatabase.CreateAsset(newMat, matPath + CorrectSeparator + AlternativeMaterialsFolderName + CorrectSeparator + (mat.name + "_" + type.name + "_v" + i + ".mat"));
+                            AssetDatabase.CreateAsset(newMat, matPath + CorrectSeparator + GeneralInformation.Paths.AlternativeMaterialsFolderName + CorrectSeparator + (mat.name + "_" + type.name + "_v" + i + ".mat"));
                             type.NewMaterials.Add(newMat);
                             if (isDebugging)
                             {
@@ -250,8 +240,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
 
         public static void CreateBackgroundElementPrefabs()
         {
-            // TODO: if path doesn't exist; also, find the prefab folder
-            string prefabPath = "";
+            string prefabPath = GeneralInformation.Paths.PrefabsFolder;
+            GeneralOperations.CreateFolderIfEmpty(prefabPath);
             // create a prefab for each type
             foreach(KeyValuePair<BackgroundTypes, BackgroundType> pair in BgParameters)
             {
@@ -286,7 +276,15 @@ namespace Nolanfa.BackgroundElementsRandomizer
         [MenuItem("CustomScripts/BackgroundElements/More/Find All Elements", false, 1)]
         public static void FindAllElements()
         {
-            BgElements = Resources.FindObjectsOfTypeAll<BackgroundElement>();
+            // this is faster (if harder to read) than Resources.FindObjectsOfTypeAll
+            // because it only searches a few folders instead of the whole project
+
+            string[] BgElementsPath = AssetDatabase.FindAssets("t: BackgroundElement", new[] { GeneralInformation.Paths.TypesFolder });
+            BgElements = new BackgroundElement[BgElementsPath.Length];
+            for (int i = 0; i < BgElementsPath.Length; i++)
+            {
+                BgElements[i] = AssetDatabase.LoadAssetAtPath<BackgroundElement>(BgElementsPath[i]);
+            }
         }
 
 
