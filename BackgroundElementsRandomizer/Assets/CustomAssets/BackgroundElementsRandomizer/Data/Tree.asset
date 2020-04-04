@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Tree
   m_EditorClassIdentifier: 
   Type: 1
+  IsLocked: 0
   RotationalAbility: 4
   Scalability: 33
   geometricMesh: {fileID: 0}
+  MeshesFolder: 
+  FindMeshesByName: 0
   Meshes:
   - {fileID: 2178022384030529044, guid: a69ecf352bc4754499e145d74e4673a5, type: 3}
   - {fileID: 2178022384030529044, guid: d59aa83b0bccfdf44a612d06649abd18, type: 3}
@@ -32,10 +35,9 @@ MonoBehaviour:
   - {fileID: -3392155244197057827, guid: fab42614898cf4d4a9aa92065f5e6be4, type: 3}
   - {fileID: 7560277172612512602, guid: 28b71bb1c0e603141b8e7d43cb697396, type: 3}
   - {fileID: 7560277172612512602, guid: fe16095b04d8e5249b75815292f9c13c, type: 3}
-  Materials:
-  - {fileID: 2100000, guid: 646d82f116477c54abcc4c98a7744ca3, type: 2}
+  Materials: []
   NewMaterials: []
+  ShouldOffsetTexture: 0
   TextureTiling: {x: 1, y: 1}
   CanCollide: 1
-  ShouldOffsetTexture: 0
   ShouldBlockUpwards: 0

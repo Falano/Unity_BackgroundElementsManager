@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: House
   m_EditorClassIdentifier: 
   Type: 0
+  IsLocked: 0
   RotationalAbility: 2
   Scalability: 0
   geometricMesh: {fileID: 0}
+  MeshesFolder: 
+  FindMeshesByName: 0
   Meshes: []
-  Materials:
-  - {fileID: 2100000, guid: 646d82f116477c54abcc4c98a7744ca3, type: 2}
+  Materials: []
   NewMaterials: []
+  ShouldOffsetTexture: 0
   TextureTiling: {x: 1, y: 1}
   CanCollide: 1
-  ShouldOffsetTexture: 0
   ShouldBlockUpwards: 0
