@@ -15,6 +15,7 @@ MonoBehaviour:
   Type: 0
   RotationalAbility: 2
   Scalability: 0
+  geometricMesh: {fileID: 0}
   Meshes: []
   Materials:
   - {fileID: 2100000, guid: 646d82f116477c54abcc4c98a7744ca3, type: 2}

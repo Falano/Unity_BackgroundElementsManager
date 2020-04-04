@@ -15,6 +15,7 @@ MonoBehaviour:
   Type: 1
   RotationalAbility: 4
   Scalability: 33
+  geometricMesh: {fileID: 0}
   Meshes:
   - {fileID: 2178022384030529044, guid: a69ecf352bc4754499e145d74e4673a5, type: 3}
   - {fileID: 2178022384030529044, guid: d59aa83b0bccfdf44a612d06649abd18, type: 3}

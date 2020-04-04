@@ -13,19 +13,29 @@ namespace Nolanfa.BackgroundElementsRandomizer
     public class BackgroundType : ScriptableObject
     {
         public BackgroundTypes Type;
+        [Header("Object")]
+        // check contextmenu and contextmenuitem
+        public bool IsLocked;
         public RotationalAbility RotationalAbility;
         [Tooltip("Scalability in % either way; with a scalability of 20, an object can be from 80% to 120% big")]
         public int Scalability;
+        [Header("Meshes")]
         public Mesh geometricMesh;
+        // TODO: at initialization, import all files in this folder with a name starting with the correct BackgroundType if FindMeshesByName is true
+        public string MeshesFolder;
+        public bool FindMeshesByName;
+        [HideInInspector]
         public List<Mesh> Meshes;
+        [Header("Materials")]
         public List<Material> Materials;
         [Tooltip("Different versions of the materials created through script, with a different offeset /n useful for natural textures")]
         public List<Material> NewMaterials;
-        public Vector2 TextureTiling;
-        public bool CanCollide;
+        [Header("Textures")]
         public bool ShouldOffsetTexture;
+        public Vector2 TextureTiling;
+        [Header("Colliders")]
+        public bool CanCollide;
         public bool ShouldBlockUpwards;
-        public bool IsLocked;
     }
 
     public enum BackgroundTypes
