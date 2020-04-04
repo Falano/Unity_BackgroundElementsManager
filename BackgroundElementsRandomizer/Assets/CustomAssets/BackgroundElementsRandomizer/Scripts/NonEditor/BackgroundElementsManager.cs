@@ -26,18 +26,10 @@ namespace Nolanfa.BackgroundElementsRandomizer
         // - create a new scriptable object of type BackgroundType
         // (Assets > Create > Scriptable Object > Background Type)
         // and fill it out appropriately
-        // - create a prefab composed of an Empty with the BackgroundElement script, 
-        // one BoxCollider if it should block out the space above it, 
-        // and with as children:
-        //// - one placeholder tagged EditorOnly containing:
-        ////// - a Mesh Filter of a simple geometric shape
-        ////// - a Mesh Renderer
-        //// - and one pretty-looking object containing:
-        ////// - a Mesh Filter of (one of) the final Mesh
-        ////// - a Mesh Renderer
-        ////// - a Collider (either an automatic convex mesh collider or a geometric one)
-        ////// (if canCollide)
+        // - automatically create a prefab using the CreatePrefabs button ( TODO: button)
 
+        
+        
         [MenuItem("CustomScripts/BackgroundElements/InitializeAll", false, 0)]
         public static void InitializeAll()
         {
@@ -45,6 +37,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
             FindAllElements();
             InitializeAllElements();
         }
+
+
 
         /// <summary>
         /// randomize background elements' pretty look
@@ -104,6 +98,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
             }
         }
 
+
+
         /// <summary>
         /// switch between geometric and pretty views
         /// </summary>
@@ -124,8 +120,9 @@ namespace Nolanfa.BackgroundElementsRandomizer
         }
 
     */
-
-
+        
+        
+        
         // TODO: add a confirmation window
         [MenuItem("CustomScripts/BackgroundElements/Reset All", false, 0)]
         public static void ResetAll()
@@ -134,6 +131,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
             ResetElements();
             ResetManager();
         }
+
+
 
         // TODO: everything
         [MenuItem("CustomScripts/BackgroundElements/Information", false, 0)]
@@ -147,6 +146,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
             // number of pretty elements?
             // some mini-tuto shoud be available here.
         }
+
+
 
         /// <summary>
         /// update a list of all different background types available
@@ -245,6 +246,40 @@ namespace Nolanfa.BackgroundElementsRandomizer
             }
         }
 
+
+
+        public static void CreateBackgroundElementPrefabs()
+        {
+            // TODO: if path doesn't exist; also, find the prefab folder
+            string prefabPath = "";
+            // create a prefab for each type
+            foreach(KeyValuePair<BackgroundTypes, BackgroundType> pair in BgParameters)
+            {
+                // create parent empty object
+                GameObject gameObject = new GameObject(pair.Key.ToString());
+                gameObject.AddComponent<BackgroundElement>();
+                if (pair.Value.ShouldBlockUpwards)
+                {
+                    gameObject.AddComponent<BoxCollider>();
+                }
+                // create geometric placeholder child
+                CreateBasicObject(name: "Geometric", parent: gameObject.transform, tag: "EditorOnly", mesh: pair.Value.geometricMesh);
+                // create pretty inGame child
+                GameObject prettyChild = CreateBasicObject(name: "Pretty", parent: gameObject.transform, mesh: pair.Value.Meshes[0]);
+                if (pair.Value.CanCollide)
+                {
+                    MeshCollider collider = prettyChild.AddComponent<MeshCollider>();
+                    // TODO: add an option for a non-automatic collider?
+                    collider.convex = true;
+                }
+
+                // make a prefab out of it
+                GameObject prefab = PrefabUtility.SaveAsPrefabAsset(gameObject, prefabPath);
+            }
+        }
+
+
+
         /// <summary>
         /// update list of background elements present in the scene
         /// </summary>
@@ -253,6 +288,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
         {
             BgElements = Resources.FindObjectsOfTypeAll<BackgroundElement>();
         }
+
+
 
         /// <summary> 
         /// initialize all background elements found so that they find the components they need to work
@@ -275,6 +312,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
             }
         }
 
+
+
         /// <summary>
         /// reset each element's parameters and locks and the view to geometric
         /// </summary>
@@ -287,6 +326,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
                 element.Reset();
             }
         }
+
+
 
         /// <summary>
         /// remove alternate materials created to have several different texture offsets
@@ -306,6 +347,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
             }
         }
 
+
+
         /// <summary>
         /// reset manager's types list and each type info to default empty state
         /// </summary>
@@ -317,6 +360,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
 
         // TODO: progress bar
 
+        
+        
         /// <summary>
         /// returns a random rotation taken from each -step- degrees; 
         /// if it can only turn 90 degrees, il will return either 
@@ -327,6 +372,33 @@ namespace Nolanfa.BackgroundElementsRandomizer
         public static int RandomRotationValue(int step)
         {
             return Random.Range(0, (360 / step)) * step;
+        }
+
+
+
+        /// <summary>
+        /// create game object with just a mesh (mesh filter and mesh renderer)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parent"></param>
+        /// <param name="tag"></param>
+        /// <param name="mesh"></param>
+        /// <returns></returns>
+        private static GameObject CreateBasicObject(string name, Mesh mesh, Transform parent = null, string tag = "")
+        {
+            GameObject gameObject = new GameObject(name);
+            if(parent != null)
+            {
+                gameObject.transform.SetParent(gameObject.transform);
+            }
+            if (tag != "")
+            {
+                gameObject.tag = tag;
+            }
+            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
+            meshFilter.mesh = mesh;
+            gameObject.AddComponent<MeshRenderer>();
+            return gameObject;
         }
     }
 }

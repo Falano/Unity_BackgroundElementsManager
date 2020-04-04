@@ -16,6 +16,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         public RotationalAbility RotationalAbility;
         [Tooltip("Scalability in % either way; with a scalability of 20, an object can be from 80% to 120% big")]
         public int Scalability;
+        public Mesh geometricMesh;
         public List<Mesh> Meshes;
         public List<Material> Materials;
         [Tooltip("Different versions of the materials created through script")]
