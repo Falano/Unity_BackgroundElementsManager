@@ -15,8 +15,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         public static Dictionary<BackgroundTypes, BackgroundType> BgParameters = new Dictionary<BackgroundTypes, BackgroundType>();
 
         public static List<string> AlternateMaterialsFoldersPaths = new List<string>();
-        public static char CorrectSeparator { get { return Path.AltDirectorySeparatorChar; } } //GeneralInformation.Paths.CorrectSeparator; } }
-
+        public static char Separator { get { return Path.AltDirectorySeparatorChar; } }
         public static bool isDebugging = false;
 
 
@@ -197,15 +196,18 @@ namespace Nolanfa.BackgroundElementsRandomizer
                         continue;
                     }
                     matPath = AssetDatabase.GetAssetPath(type.Materials[0]);
-                    int lastSlash = matPath.LastIndexOf(GeneralInformation.Paths.CorrectSeparator);
+                    int lastSlash = matPath.LastIndexOf(Separator);
                     matPath = matPath.Remove(lastSlash);
-                    matFolder = matPath + CorrectSeparator + GeneralInformation.Paths.AlternativeMaterialsFolderName;
+                    matFolder = matPath + Separator + GeneralInformation.Paths.AlternativeMaterialsFolderName;
                     GeneralOperations.CreateFolderIfEmpty(matFolder);
                     // for cleaning up purposes later
                     if (!AlternateMaterialsFoldersPaths.Contains(matFolder))
                     {
                         AlternateMaterialsFoldersPaths.Add(matFolder);
-                        Debug.Log("created folder " + matFolder);
+                        if (isDebugging)
+                        {
+                            Debug.Log("created folder " + matFolder);
+                        }
                     }
 
                     tiling = type.TextureTiling;
@@ -218,7 +220,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
                             {
                                 mainTextureOffset = new Vector2(Random.Range((float)0, (float)1), Random.Range((float)0, (float)1))
                             };
-                            AssetDatabase.CreateAsset(newMat, matPath + CorrectSeparator + GeneralInformation.Paths.AlternativeMaterialsFolderName + CorrectSeparator + (mat.name + "_" + type.name + "_v" + i + ".mat"));
+                            AssetDatabase.CreateAsset(newMat, matPath + Separator + GeneralInformation.Paths.AlternativeMaterialsFolderName + Separator + (mat.name + "_" + type.name + "_v" + i + ".mat"));
                             type.NewMaterials.Add(newMat);
                             if (isDebugging)
                             {
