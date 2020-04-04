@@ -67,7 +67,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
                 matNumber = Random.Range(0, BgParameters[currentType].NewMaterials.Count);
                 element.ChangeMat(BgParameters[currentType].NewMaterials[matNumber]);
 
-                if (element.IsRotationLocked)
+                if (element.IsRotationScaleLocked)
                 {
                     continue;
                 }

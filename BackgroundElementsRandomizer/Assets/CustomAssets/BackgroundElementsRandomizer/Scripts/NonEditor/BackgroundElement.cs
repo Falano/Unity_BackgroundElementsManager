@@ -52,7 +52,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
             }
         }
 
-        public bool IsRotationLocked
+        public bool IsRotationScaleLocked
         {
             get
             {
