@@ -54,7 +54,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
                 // start showing pretty background elements
                 element.ActivatePrettyBackground();
 
-                if (element.IsAspectLocked)
+                if (element.IsAspectLocked || BgParameters[element.GetBackgroundType()].IsLocked)
                 {
                     continue;
                 }

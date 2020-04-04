@@ -19,12 +19,13 @@ namespace Nolanfa.BackgroundElementsRandomizer
         public Mesh geometricMesh;
         public List<Mesh> Meshes;
         public List<Material> Materials;
-        [Tooltip("Different versions of the materials created through script")]
+        [Tooltip("Different versions of the materials created through script, with a different offeset /n useful for natural textures")]
         public List<Material> NewMaterials;
         public Vector2 TextureTiling;
         public bool CanCollide;
         public bool ShouldOffsetTexture;
         public bool ShouldBlockUpwards;
+        public bool IsLocked;
     }
 
     public enum BackgroundTypes
