@@ -87,12 +87,12 @@ namespace Nolanfa.BackgroundElementsRandomizer
 
             _prettyMesh = _prettyBg.GetComponent<MeshFilter>();
             _prettyRenderer = _prettyBg.GetComponent<MeshRenderer>();
-            if (BackgroundElementsManager.BgParameters[Type].CanCollide)
+            if (BackgroundElementsManager.BackgroundTypesDictionary[Type].CanCollide)
             {
                 _prettyCollider = _prettyBg.GetComponent<Collider>();
             }
 
-            if (_placeholder == null || _prettyBg == null || _prettyMesh == null || (_prettyCollider == null && BackgroundElementsManager.BgParameters[Type].CanCollide) || _prettyRenderer == null)
+            if (_placeholder == null || _prettyBg == null || _prettyMesh == null || (_prettyCollider == null && BackgroundElementsManager.BackgroundTypesDictionary[Type].CanCollide) || _prettyRenderer == null)
             {
                 Debug.LogError("Element " + gameObject.name + " could not be fully initialized. Please check that it has two children, " +
                     "one of which is tagged 'EditorOnly' and holds a simple geometric mesh, " +
@@ -100,7 +100,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
 
             }
 
-            if (BackgroundElementsManager.BgParameters[Type].ShouldBlockUpwards)
+            if (BackgroundElementsManager.BackgroundTypesDictionary[Type].ShouldBlockUpwards)
             {
                 _unwalkableCollider = GetComponent<BoxCollider>();
                 _unwalkableColliderBaseScale = _unwalkableCollider.size.y;

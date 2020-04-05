@@ -10,9 +10,9 @@ namespace Nolanfa.BackgroundElementsRandomizer
 {
     public static class BackgroundElementsManager
     {
-        public static BackgroundElement[] BgElements;
+        public static BackgroundElement[] BackgroundElements;
 
-        public static Dictionary<BackgroundTypes, BackgroundType> BgParameters = new Dictionary<BackgroundTypes, BackgroundType>();
+        public static Dictionary<BackgroundTypes, BackgroundType> BackgroundTypesDictionary = new Dictionary<BackgroundTypes, BackgroundType>();
 
         public static List<string> AlternateMaterialsFoldersPaths = new List<string>();
         public static char Separator { get { return Path.AltDirectorySeparatorChar; } }
@@ -48,30 +48,30 @@ namespace Nolanfa.BackgroundElementsRandomizer
             BackgroundTypes currentType;
             int meshNumber;
             int matNumber;
-            foreach (BackgroundElement element in BgElements)
+            foreach (BackgroundElement element in BackgroundElements)
             {
                 // start showing pretty background elements
                 element.ActivatePrettyBackground();
 
-                if (element.IsAspectLocked || BgParameters[element.GetBackgroundType()].IsLocked)
+                if (element.IsAspectLocked || BackgroundTypesDictionary[element.GetBackgroundType()].IsLocked)
                 {
                     continue;
                 }
 
                 currentType = element.GetBackgroundType();
                 // choose random mesh
-                meshNumber = Random.Range(0, BgParameters[currentType].Meshes.Count);
-                element.ChangeMesh(BgParameters[currentType].Meshes[meshNumber]);
+                meshNumber = Random.Range(0, BackgroundTypesDictionary[currentType].Meshes.Count);
+                element.ChangeMesh(BackgroundTypesDictionary[currentType].Meshes[meshNumber]);
                 // choose random material
-                matNumber = Random.Range(0, BgParameters[currentType].NewMaterials.Count);
-                element.ChangeMat(BgParameters[currentType].NewMaterials[matNumber]);
+                matNumber = Random.Range(0, BackgroundTypesDictionary[currentType].NewMaterials.Count);
+                element.ChangeMat(BackgroundTypesDictionary[currentType].NewMaterials[matNumber]);
 
                 if (element.IsRotationScaleLocked)
                 {
                     continue;
                 }
                 // if allowed, choose random rotation
-                switch (BgParameters[currentType].RotationalAbility)
+                switch (BackgroundTypesDictionary[currentType].RotationalAbility)
                 {
                     case RotationalAbility.None:
                         break;
@@ -90,9 +90,9 @@ namespace Nolanfa.BackgroundElementsRandomizer
                 }
 
                 // choose random scale
-                if (BgParameters[currentType].Scalability != 0)
+                if (BackgroundTypesDictionary[currentType].Scalability != 0)
                 {
-                    element.ChangeScale(Random.Range(-BgParameters[currentType].Scalability / 100, BgParameters[currentType].Scalability / 100));
+                    element.ChangeScale(Random.Range(-BackgroundTypesDictionary[currentType].Scalability / 100, BackgroundTypesDictionary[currentType].Scalability / 100));
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         [MenuItem("CustomScripts/BackgroundElements/Switch view", false, 0)]
         public static void SwitchView()
         {
-            foreach (BackgroundElement element in BgElements)
+            foreach (BackgroundElement element in BackgroundElements)
             {
                 element.ActivatePrettyBackground(!element.CheckPrettyState());
             }
@@ -154,23 +154,21 @@ namespace Nolanfa.BackgroundElementsRandomizer
         [MenuItem("CustomScripts/BackgroundElements/More/InitializeManager", false, 1)]
         public static void InitializeManager()
         {
-            BackgroundType[] types = Resources.FindObjectsOfTypeAll<BackgroundType>();
-            if (isDebugging)
+            // get all background types automatically
+
+            // this is faster (if harder to read) than Resources.FindObjectsOfTypeAll
+            // because it only searches a few folders instead of the whole project
+
+            string[] typesPaths = AssetDatabase.FindAssets("t: BackgroundType", new[] {GeneralInformation.Paths.TypesFolder });
+            foreach (string path in typesPaths)
             {
-                Debug.Log("number of types: " + types.Length);
-            }
-            foreach (BackgroundType type in types)
-            {
-                if (!BgParameters.ContainsValue(type))
+                BackgroundType type = AssetDatabase.LoadAssetAtPath<BackgroundType>(path);
+                if (!BackgroundTypesDictionary.ContainsValue(type))
                 {
-                    if(isDebugging)
-                    {
-                        Debug.Log("adding type " + type.name);
-                    }
-                    BgParameters.Add(type.Type, type);
+                    BackgroundTypesDictionary.Add(type.Type, type);
                 }
             }
-
+            
             // create x versions of each material per type, ensure it has the right scale
             // and offset it x different ways
             // we need to use Database.CreateAsset so there is a path on disk to the new materials;
@@ -179,7 +177,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
             Material newMat;
             string matPath;
             string matFolder;
-            foreach(BackgroundType type in BgParameters.Values)
+            foreach(BackgroundType type in BackgroundTypesDictionary.Values)
             {
                 if (!type.ShouldOffsetTexture)
                 {
@@ -245,7 +243,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
             string prefabPath = GeneralInformation.Paths.PrefabsFolder;
             GeneralOperations.CreateFolderIfEmpty(prefabPath);
             // create a prefab for each type
-            foreach(KeyValuePair<BackgroundTypes, BackgroundType> pair in BgParameters)
+            foreach(KeyValuePair<BackgroundTypes, BackgroundType> pair in BackgroundTypesDictionary)
             {
                 // create parent empty object
                 GameObject gameObject = new GameObject(pair.Key.ToString());
@@ -277,16 +275,8 @@ namespace Nolanfa.BackgroundElementsRandomizer
         /// </summary>
         [MenuItem("CustomScripts/BackgroundElements/More/Find All Elements", false, 1)]
         public static void FindAllElements()
-        {
-            // this is faster (if harder to read) than Resources.FindObjectsOfTypeAll
-            // because it only searches a few folders instead of the whole project
-
-            string[] BgElementsPath = AssetDatabase.FindAssets("t: BackgroundElement", new[] { GeneralInformation.Paths.TypesFolder });
-            BgElements = new BackgroundElement[BgElementsPath.Length];
-            for (int i = 0; i < BgElementsPath.Length; i++)
-            {
-                BgElements[i] = AssetDatabase.LoadAssetAtPath<BackgroundElement>(BgElementsPath[i]);
-            }
+        {            
+            BackgroundElements = Object.FindObjectsOfType<BackgroundElement>();
         }
 
 
@@ -297,11 +287,11 @@ namespace Nolanfa.BackgroundElementsRandomizer
         [MenuItem("CustomScripts/BackgroundElements/More/Initialize Elements", false, 1)]
         public static void InitializeAllElements()
         {
-            foreach (BackgroundElement element in BgElements)
+            foreach (BackgroundElement element in BackgroundElements)
             {
                 element.Initialize(verbose: false);
 
-                if(BgParameters[element.Type].ShouldBlockUpwards)
+                if(BackgroundTypesDictionary[element.Type].ShouldBlockUpwards)
                 {
                     element.SetUnwalkableCollider();
                 }
@@ -321,7 +311,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         [MenuItem("CustomScripts/BackgroundElements/More/Reset Background", false, 50)]
         public static void ResetElements()
         {
-            foreach (BackgroundElement element in BgElements)
+            foreach (BackgroundElement element in BackgroundElements)
             {
                 element.Reset();
             }
@@ -341,7 +331,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
             }
             AssetDatabase.Refresh();
             AlternateMaterialsFoldersPaths.Clear();
-            foreach (BackgroundType type in BgParameters.Values)
+            foreach (BackgroundType type in BackgroundTypesDictionary.Values)
             {
                 type.NewMaterials.Clear();
             }
@@ -355,7 +345,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         [MenuItem("CustomScripts/BackgroundElements/More/ResetManager", false, 50)]
         public static void ResetManager()
         {
-            BgParameters.Clear();
+            BackgroundTypesDictionary.Clear();
         }
 
         // TODO: progress bar
