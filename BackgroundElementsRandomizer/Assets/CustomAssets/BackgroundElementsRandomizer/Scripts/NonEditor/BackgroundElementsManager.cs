@@ -33,6 +33,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         public static void InitializeAll()
         {
             InitializeManager();
+            CreateBackgroundElementPrefabs();
             FindAllElements();
             InitializeAllElements();
         }
@@ -261,9 +262,18 @@ namespace Nolanfa.BackgroundElementsRandomizer
         }
 
 
-
+        /// <summary>
+        /// Create a prefab for each background type. Needs the manager to have been initialized so the list of background types is not empty
+        /// </summary>
+        [MenuItem("CustomScripts/BackgroundElements/More/CreatePrefabs", false, 1)]
         public static void CreateBackgroundElementPrefabs()
         {
+            if(BackgroundTypesDictionary.Count == 0)
+            {
+                Debug.LogError("Please initialize the manager first; it doesn't know yet which types exist. (Background Types Dictionary is empty)");
+                return;
+            }
+
             string prefabPath = GeneralInformation.Paths.PrefabsFolder;
             GeneralOperations.CreateFolderIfEmpty(prefabPath);
             // create a prefab for each type
