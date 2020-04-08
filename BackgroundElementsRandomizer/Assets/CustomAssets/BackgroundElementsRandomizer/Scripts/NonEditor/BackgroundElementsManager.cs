@@ -170,9 +170,29 @@ namespace Nolanfa.BackgroundElementsRandomizer
                 if (!BackgroundTypesDictionary.ContainsValue(type))
                 {
                     BackgroundTypesDictionary.Add(type.Type, type);
+
+                    // for each background type, get the meshes from the mesh folder
+
+                    // since the script adds all files that contain the type's name,
+                    // it is case-sensitive to lower the risk of errors with too-similar names
+                    string[] meshesPaths = AssetDatabase.FindAssets(
+                        type.FindMeshesByName?
+                        "t: Mesh name: " + type.Type.ToString():
+                        "t: Mesh"
+                        , new[] { type.MeshesFolder });
+
+                    foreach (string meshPath in meshesPaths)
+                    {
+                        Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
+                        if (!type.Meshes.Contains(mesh))
+                        {
+                            type.Meshes.Add(mesh);
+                        }
+                    }
                 }
             }
-            
+
+
             // create x versions of each material per type, ensure it has the right scale
             // and offset it x different ways
             // we need to use Database.CreateAsset so there is a path on disk to the new materials;
