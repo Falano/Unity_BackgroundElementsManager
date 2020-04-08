@@ -5,12 +5,5 @@ loading bar
 add ChangePos param
 clean up params (group the platform-related ones?)
 test both ways (several UVmaps vs several textures) and compare performance with 500+ objs (also do a test with heavier meshes)
-have it build the prefab on its own
 documentation
 make a script that fixes "Material Editing is not supported on multiple selection" (for each mesh, either it copies from an origin mesh, in the .meta file, whatever is between "externalObjects:" and "materials:" (if we want Material Location to be "Use Embedded Materials" with a common Remapped Material), or we change "materialLocation" from 1 to 0 (if we want Material Location to be "Use External Materials (Legacy)"))
-
-??
-	?? instead of taking a list of meshes, take a MeshFolder and automatically get the meshes?
-+> unity doesn't let you shift-select a whole lot of meshes, since they're nested inside objects; you need to open each and click on each mesh before drag-and-dropping in the inspector's field. For a couple objects it's ok but have a dozen and you'll hate the world.
--> it forces users to have one folder per type though, instead of all in the same foder
-+> you could use their name to only import the right ones
