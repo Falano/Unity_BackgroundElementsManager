@@ -347,7 +347,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         {
             foreach (BackgroundElement element in BackgroundElements)
             {
-                element.Reset();
+                element.Reinitialize();
             }
         }
 

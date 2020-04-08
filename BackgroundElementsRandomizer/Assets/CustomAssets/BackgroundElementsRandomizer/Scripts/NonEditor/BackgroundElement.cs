@@ -196,7 +196,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
         /// <summary>
         /// reset parameters and locks and the view to geometric
         /// </summary>
-        public void Reset()
+        public void Reinitialize()
         {
             ActivatePrettyBackground(false);
             ChangeRotation(0);
