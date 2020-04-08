@@ -174,17 +174,19 @@ namespace Nolanfa.BackgroundElementsRandomizer
 
                     // for each background type, get the meshes from the mesh folder
 
-                    // since the script adds all files that contain the type's name,
-                    // it is case-sensitive to lower the risk of errors with too-similar names
                     string[] meshesPaths = AssetDatabase.FindAssets(
                         type.FindMeshesByName?
-                        "t: Mesh name: " + type.Type.ToString():
+                        type.Type.ToString() + " t: Mesh":
                         "t: Mesh"
                         , new[] { type.MeshesFolder });
 
+                    if(meshesPaths.Length == 0)
+                    {
+                        Debug.LogError("Could not find meshes to use for " + type.Type.ToString() + " at " + type.MeshesFolder + ". If this is not fixed, the Prefab Creation will fail.");
+                    }
                     foreach (string meshPath in meshesPaths)
                     {
-                        Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
+                        Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(AssetDatabase.GUIDToAssetPath(meshPath));
                         if (!type.Meshes.Contains(mesh))
                         {
                             type.Meshes.Add(mesh);
@@ -281,24 +283,27 @@ namespace Nolanfa.BackgroundElementsRandomizer
             {
                 // create parent empty object
                 GameObject gameObject = new GameObject(pair.Key.ToString());
-                gameObject.AddComponent<BackgroundElement>();
+                gameObject.AddComponent<BackgroundElement>().SetType(pair.Key);
                 if (pair.Value.ShouldBlockUpwards)
                 {
                     gameObject.AddComponent<BoxCollider>();
                 }
                 // create geometric placeholder child
-                CreateBasicObject(name: "Geometric", parent: gameObject.transform, tag: "EditorOnly", mesh: pair.Value.geometricMesh);
+                CreateBasicObject(name: "Geometric", parent: gameObject.transform, tag: "EditorOnly", mesh: pair.Value.geometricMesh, material: pair.Value.Materials[0]);
                 // create pretty inGame child
-                GameObject prettyChild = CreateBasicObject(name: "Pretty", parent: gameObject.transform, mesh: pair.Value.Meshes[0]);
+                GameObject prettyChild = CreateBasicObject(name: "Pretty", parent: gameObject.transform, mesh: pair.Value.Meshes[0], material: pair.Value.Materials[0]);
                 if (pair.Value.CanCollide)
                 {
                     MeshCollider collider = prettyChild.AddComponent<MeshCollider>();
                     // TODO: add an option for a non-automatic collider?
                     collider.convex = true;
                 }
+                prettyChild.SetActive(false);
 
-                // make a prefab out of it
-                GameObject prefab = PrefabUtility.SaveAsPrefabAsset(gameObject, prefabPath);
+                // make a prefab out of it and remove it from the scene
+                GameObject prefab = PrefabUtility.SaveAsPrefabAsset(gameObject, prefabPath + Separator + pair.Key.ToString() + ".prefab");
+                // Object.Destroy cannot be called in edit mode
+                Object.DestroyImmediate(gameObject);
             }
         }
 
@@ -379,6 +384,10 @@ namespace Nolanfa.BackgroundElementsRandomizer
         [MenuItem("CustomScripts/BackgroundElements/More/ResetManager", false, 50)]
         public static void ResetManager()
         {
+            foreach(BackgroundType type in BackgroundTypesDictionary.Values)
+            {
+                type.Meshes.Clear();
+            }
             BackgroundTypesDictionary.Clear();
         }
 
@@ -408,12 +417,12 @@ namespace Nolanfa.BackgroundElementsRandomizer
         /// <param name="tag"></param>
         /// <param name="mesh"></param>
         /// <returns></returns>
-        private static GameObject CreateBasicObject(string name, Mesh mesh, Transform parent = null, string tag = "")
+        private static GameObject CreateBasicObject(string name, Mesh mesh, Transform parent = null, string tag = "", Material material = null)
         {
             GameObject gameObject = new GameObject(name);
             if(parent != null)
             {
-                gameObject.transform.SetParent(gameObject.transform);
+                gameObject.transform.parent = parent;
             }
             if (tag != "")
             {
@@ -421,7 +430,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
             }
             MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
             meshFilter.mesh = mesh;
-            gameObject.AddComponent<MeshRenderer>();
+            gameObject.AddComponent<MeshRenderer>().material = material;
             return gameObject;
         }
     }

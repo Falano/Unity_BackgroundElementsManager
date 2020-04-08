@@ -183,6 +183,11 @@ namespace Nolanfa.BackgroundElementsRandomizer
             return !_placeholder.activeSelf;
         }
 
+        public void SetType(BackgroundTypes type)
+        {
+            _type = type;
+        }
+
         /// <summary>
         /// activate pretty element and hide geometric one
         /// </summary>
