@@ -16,12 +16,14 @@ MonoBehaviour:
   IsLocked: 0
   RotationalAbility: 2
   Scalability: 0
-  geometricMesh: {fileID: 0}
-  MeshesFolder: 
-  FindMeshesByName: 0
+  geometricMesh: {fileID: 2294534584583100607, guid: bbe6ec73c39e4b34786862dc69a1779c,
+    type: 3}
+  MeshesFolder: Assets/CustomAssets/BackgroundElementsRandomizer/__Demo/Art/0_Models
+  FindMeshesByName: 1
   Meshes: []
   Materials: []
-  NewMaterials: []
+  NewMaterials:
+  - {fileID: 2100000, guid: 646d82f116477c54abcc4c98a7744ca3, type: 2}
   ShouldOffsetTexture: 0
   TextureTiling: {x: 1, y: 1}
   CanCollide: 1

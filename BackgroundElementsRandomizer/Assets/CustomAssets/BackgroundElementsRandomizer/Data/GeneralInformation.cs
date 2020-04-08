@@ -10,8 +10,8 @@ namespace Nolanfa
         public static class Paths
         {
 
-            public static string TypesFolder = "Assets/CustomAssets/BackgroundElementsRandomizer/Data";
-            public static string PrefabsFolder = "Assets/CustomAssets/BackgroundElementsRandomizer/Prefabs";
+            public static string TypesFolder = "Assets/CustomAssets/BackgroundElementsRandomizer/__Demo/Data";
+            public static string PrefabsFolder = "Assets/CustomAssets/BackgroundElementsRandomizer/__Demo/Prefabs";
             public static string AlternativeMaterialsFolderName = "alternativeVersions";
         }
     }
