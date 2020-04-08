@@ -12,7 +12,7 @@ namespace Nolanfa.BackgroundElementsRandomizer
     {
         public static BackgroundElement[] BackgroundElements;
 
-        public static Dictionary<BackgroundTypes, BackgroundType> BackgroundTypesDictionary = new Dictionary<BackgroundTypes, BackgroundType>();
+        public static Dictionary<BackgroundTypes, BackgroundType> BackgroundTypesDictionary;
 
         public static List<string> AlternateMaterialsFoldersPaths = new List<string>();
         public static char Separator { get { return Path.AltDirectorySeparatorChar; } }
@@ -162,7 +162,11 @@ namespace Nolanfa.BackgroundElementsRandomizer
             string[] typesPaths = AssetDatabase.FindAssets("t: BackgroundType", new[] {GeneralInformation.Paths.TypesFolder });
             foreach (string path in typesPaths)
             {
-                BackgroundType type = AssetDatabase.LoadAssetAtPath<BackgroundType>(path);
+                BackgroundType type = AssetDatabase.LoadAssetAtPath<BackgroundType>(AssetDatabase.GUIDToAssetPath(path));
+                if(BackgroundTypesDictionary == null)
+                {
+                    BackgroundTypesDictionary = new Dictionary<BackgroundTypes, BackgroundType>();
+                }
                 if (!BackgroundTypesDictionary.ContainsValue(type))
                 {
                     BackgroundTypesDictionary.Add(type.Type, type);
